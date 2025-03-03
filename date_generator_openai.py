@@ -9,15 +9,15 @@ def get_device_support_dates(device_name):
     # Construct the prompt
     prompt = f'''Provide the below details as JSON for device: {device_name}, no extra information:  Last Date of Support for HW, Last Date of Security Support for SW with their reference links
 
-The final output format as json would be 
+The final output must be in this exact JSON format:
 {{
   "Last Date of Support for HW": {{
-    "date": string
-    "reference": string
+    "date": YYYY-MM-DD, # if not available then return None.
+    "reference": [list of strings]  # if not available then return [].
   }},
   "Last Date of Security Support for SW": {{
-    "date": string
-    "reference": string
+    "date": YYYY-MM-DD, # if not available then return None.
+    "reference": [list of strings] # if not available then return [].
   }}
 }}'''
 
@@ -52,7 +52,8 @@ The final output format as json would be
 # Example usage
 if __name__ == "__main__":
     # Example device name
-    device = "Cisco Catalyst 3850 Stack"
+    # device = "Cisco Catalyst 3850 Stack"
+    device = "AIR-CT2504-K9"
     
     # Get the response
     result = get_device_support_dates(device)

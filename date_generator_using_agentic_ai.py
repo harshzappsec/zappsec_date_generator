@@ -39,7 +39,7 @@ def get_device_support_dates(device_name):
             "   - For software: 'End of Security Support', 'End of Security Updates', 'End of Software Maintenance'",
             "   - Convert all dates to YYYY-MM-DD format",
             "   - If multiple dates exist, use the latest official announcement",
-            "   - If no specific date is found, respond with 'Not Available'",
+            "   - If no specific date is found, respond with 'None'",
             
             # "4. Reference Links:",
             # "   - Prioritize official manufacturer documentation",
@@ -59,30 +59,30 @@ def get_device_support_dates(device_name):
             # "   - For other manufacturers: Find their equivalent support pages"
         ],
         tools=[GoogleSearchTools(
-            fixed_max_results=10,
+            fixed_max_results=5,
         )],
         show_tool_calls=False
     )
 
-    prompt = f'''Search and provide accurate end-of-support dates for device: {device_name}
+    prompt = f'''Search and provide accurate the below dates for device: {device_name}
 
 Return only the following details in JSON format:
 - Last Date of Support for Hardware (HW)
 - Last Date of Security Support for Software (SW)
-- Include official reference links for each date
+- Include list of reference links for each date
 
-If a date is not available, use "Not Available" as the date value.
-If no reference is found, use "No official reference available" as the reference value.
+If a date is not available, then use "None" as the date value.
+# If no reference is found, use an empty list [].
 
 The final output must be in this exact JSON format:
 {{
   "Last Date of Support for HW": {{
-    "date": string,
-    "reference": string
+    "date": YYYY-MM-DD, # if not available then return None.
+    "reference": [list of strings]  # if not available then return [].
   }},
   "Last Date of Security Support for SW": {{
-    "date": string,
-    "reference": string
+    "date": YYYY-MM-DD, # if not available then return None.
+    "reference": [list of strings] # if not available then return [].
   }}
 }}'''
 
@@ -99,8 +99,8 @@ The final output must be in this exact JSON format:
 if __name__ == "__main__":
 
     # Example device name
-    device = "Cisco Catalyst 3850 Stack"
-    # device = "AIR-CT2504-K9"
+    # device = "Cisco Catalyst 3850 Stack"
+    device = "AIR-CT2504-K9"
     
     # Get the response
     result = get_device_support_dates(device)
